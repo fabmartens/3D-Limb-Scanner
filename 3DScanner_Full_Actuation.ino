@@ -1,6 +1,9 @@
 // #define these too
-int smDirectionPin = 4; //Direction pin
-int smStepPin = 3; //Stepper pin
+int smDirectionPin = 4; // Direction pin for linear motor
+int smStepPin = 3; // Stepper pin for linear motor
+int rotMotorFaceDirectionPin = 7; // Direction pin for rotational motor closest to face
+int rotMotorHandDirectionPin = 8; // Direction pin for rotational motor closest to hand
+int rotStepPin = 9; // Stepper pin for rotational motors
 
 // #define and take out = for all constants
 int buttonPin = 10;
@@ -16,10 +19,15 @@ void setup(){
   /*Sets all pin to output; the microcontroller will send them(the pins) bits, it will not expect to receive any bits from thiese pins.*/
   pinMode(smDirectionPin, OUTPUT);
   pinMode(smStepPin, OUTPUT);
+  pinMode(rotMotorFaceDirectionPin, OUTPUT);
+  pinMode(rotMotorHandDirectionPin, OUTPUT);
+  pinMode(rotStepPin, OUTPUT);
 
   pinMode(buttonPin, INPUT);
   pinMode(limitRest, INPUT);
   pinMode(limitPush, INPUT);
+
+  
  
   Serial.begin(9600);
 
@@ -42,35 +50,23 @@ void loop(){
     actOnButtons();
   }
   
-/*  
-  readButtons();
-  actOnButtons();
-*/
 }
 
 
 boolean readButtons(){
-  return (digitalRead(buttonPin) == HIGH && digitalRead(limitPush) == HIGH)
+  return (digitalRead(buttonPin) == HIGH && digitalRead(limitPush) == HIGH);
 }
-/*
-void readButtons() {
-  if (digitalRead(limitRest) == HIGH) {
-    flag3 = false;
-  }
-  
-  if (digitalRead(buttonPin) == HIGH && digitalRead(limitPush) == HIGH) {
-    flag1 = true;
-    flag2 = true;
-    flag3 = true;
-  }
-}
-*/
+
 void actOnButtons() {
     digitalWrite(smDirectionPin, LOW); //Writes the direction to the EasyDriver DIR pin. (HIGH is counter clockwise with black wire at B1 on stepper)
+    digitalWrite(rotMotorFaceDirectionPin, LOW);
+    digitalWrite(rotMotorHandDirectionPin, HIGH);
     for (int i = 0; i < stepsToEnd; i++){
       digitalWrite(smStepPin, HIGH);
+      digitalWrite(rotStepPin, HIGH);
       delayMicroseconds(forwardDelay);
       digitalWrite(smStepPin, LOW);
+      digitalWrite(rotStepPin, LOW);
       delayMicroseconds(forwardDelay);
     }
  
