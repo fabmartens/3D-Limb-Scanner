@@ -1,10 +1,8 @@
+// #define these too
 int smDirectionPin = 4; //Direction pin
 int smStepPin = 3; //Stepper pin
 
-boolean flag1 = false; 
-boolean flag2 = false;
-boolean flag3 = false;
-
+// #define and take out = for all constants
 int buttonPin = 10;
 int limitRest = 5;
 int limitPush = 6;
@@ -39,12 +37,22 @@ void moveToStart() {
 }
 
 void loop(){
-
+  
+  if (readButtons()) {
+    actOnButtons();
+  }
+  
+/*  
   readButtons();
   actOnButtons();
-
+*/
 }
 
+
+boolean readButtons(){
+  return (digitalRead(buttonPin) == HIGH && digitalRead(limitPush) == HIGH)
+}
+/*
 void readButtons() {
   if (digitalRead(limitRest) == HIGH) {
     flag3 = false;
@@ -56,9 +64,8 @@ void readButtons() {
     flag3 = true;
   }
 }
-
+*/
 void actOnButtons() {
-  if (flag1 == true && flag2 == true && flag3 == true) {
     digitalWrite(smDirectionPin, LOW); //Writes the direction to the EasyDriver DIR pin. (HIGH is counter clockwise with black wire at B1 on stepper)
     for (int i = 0; i < stepsToEnd; i++){
       digitalWrite(smStepPin, HIGH);
@@ -66,9 +73,8 @@ void actOnButtons() {
       digitalWrite(smStepPin, LOW);
       delayMicroseconds(forwardDelay);
     }
-    flag1 = false;
  
-    delay(4000); //Pauses for a second (the motor does not need to pause between switching direction, so you can safely remove this)
+    delay(4000); //Pauses for 4 seconds (the motor does not need to pause between switching direction, so you can safely remove this)
    
     digitalWrite(smDirectionPin, HIGH); //Writes the direction to the EasyDriver DIR pin. (HIGH is counter clockwise with black wire at B1 on stepper)
     for (int i = 0; i < stepsToEnd; i++){
@@ -77,6 +83,4 @@ void actOnButtons() {
       digitalWrite(smStepPin, LOW);
       delayMicroseconds(backwardDelay);
     }
-    flag2 = false;
-  }
 }
