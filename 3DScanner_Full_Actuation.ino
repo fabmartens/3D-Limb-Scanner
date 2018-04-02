@@ -1,7 +1,7 @@
 #define LINEAR_DIR_PIN 4 // Direction pin for linear motor
 #define LINEAR_STEP_PIN 3 // Stepper pin for linear motor
 #define ROT_FACE_DIR_PIN 7 // Direction pin for rotational motor closest to face
-#define ROT_HAND_DIR_PIN 8 // Direction pin for rotational motor closest to hand
+//#define ROT_HAND_DIR_PIN 8 // Direction pin for rotational motor closest to hand
 #define ROT_STEP_PIN 9 // Stepper pin for rotational motors
 
 #define BUTTON_PIN 10
@@ -18,7 +18,7 @@ void setup(){
   pinMode(LINEAR_DIR_PIN, OUTPUT);
   pinMode(LINEAR_STEP_PIN, OUTPUT);
   pinMode(ROT_FACE_DIR_PIN, OUTPUT);
-  pinMode(ROT_HAND_DIR_PIN, OUTPUT);
+  //pinMode(ROT_HAND_DIR_PIN, OUTPUT);
   pinMode(ROT_STEP_PIN, OUTPUT);
 
   /* Sets button pins to inputs */
@@ -73,24 +73,24 @@ void moveSteps(int stepPin, int numSteps, int delayTime) {
 void actOnButtons() {
   digitalWrite(LINEAR_DIR_PIN, LOW); //Writes the direction to the EasyDriver DIR pin. (HIGH is counter clockwise with black wire at B1 on stepper)
   digitalWrite(ROT_FACE_DIR_PIN, LOW);
-  digitalWrite(ROT_HAND_DIR_PIN, HIGH);
+  //digitalWrite(ROT_HAND_DIR_PIN, HIGH);
   /* Moves slider all the way to the end, rotating the whole thing as it goes */
   
   /* Moves slider to the end while rotating, in an incremental path */
-  for (int i = 0; i < STEPS_TO_END; i++){
-    moveSteps(LINEAR_STEP_PIN, 5, FORWARD_DELAY);
-    moveSteps(ROT_STEP_PIN, 3, FORWARD_DELAY);
-    delay(5000);
-  }
-    /* Moves slider to the end while rotating, in a helical path */
 //  for (int i = 0; i < STEPS_TO_END; i++){
-//    digitalWrite(LINEAR_STEP_PIN, HIGH);
-//    digitalWrite(ROT_STEP_PIN, HIGH);
-//    delayMicroseconds(FORWARD_DELAY);
-//    digitalWrite(LINEAR_STEP_PIN, LOW);
-//    digitalWrite(ROT_STEP_PIN, LOW);
-//    delayMicroseconds(FORWARD_DELAY);
+//    moveSteps(LINEAR_STEP_PIN, 1, FORWARD_DELAY);
+//    moveSteps(ROT_STEP_PIN, 1, FORWARD_DELAY);
+//    delay(5000);
 //  }
+    /* Moves slider to the end while rotating, in a helical path */
+  for (int i = 0; i < STEPS_TO_END; i++){
+    digitalWrite(LINEAR_STEP_PIN, HIGH);
+    digitalWrite(ROT_STEP_PIN, HIGH);
+    delayMicroseconds(FORWARD_DELAY);
+    digitalWrite(LINEAR_STEP_PIN, LOW);
+    digitalWrite(ROT_STEP_PIN, LOW);
+    delayMicroseconds(FORWARD_DELAY);
+  }
 
   delay(2000); //Pauses for 2 seconds (the motor does not need to pause between switching direction, so you can safely remove this)
 
